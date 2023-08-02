@@ -3,6 +3,7 @@ Assignment 5 Solution - Leave this if you want to use it for Assignment 6 - MS
 */
 const express = require('express')
 const store_service = require('./store-service')
+const authData=require('./auth-service')
 const app = express()
 const Sequelize = require('sequelize');
 const port = process.env.PORT || 8080

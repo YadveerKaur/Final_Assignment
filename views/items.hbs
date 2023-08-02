@@ -1,0 +1,38 @@
+<body>
+  <h2>Items<a href="/Items/add" class="btn btn-success pull-right">Add Post</a></h2>
+  <hr />
+  <div class="table-responsive">
+    <table class="table table-responsive table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Post Date</th>
+        <th>Price</th>
+        <th>Category</th>
+        <th>Published</th>
+        <th>REMOVE</th>
+      </tr>
+
+      {{#each items}}
+        <tr>
+          <td>{{id}}</td>
+          <td>{{title}}</td>
+          <td>{{postDate}}</td>
+          <td>{{price}}</td>
+          <td><a href="/items?category={{category}}">{{category}}</a></td>
+          <td>{{published}}</td>
+          <td><a
+              class="btn btn-danger"
+              href="/items/delete/{{id}}"
+            >Remove</a></td>
+        </tr>
+      {{else}}
+        <div class="col-md-12 text-center">
+          <strong>{{message}}</strong>
+        </div>
+      {{/each}}
+    </table>
+
+  </div>
+
+</body>

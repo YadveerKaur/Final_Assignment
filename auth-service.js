@@ -30,7 +30,7 @@ module.exports.initialize = function () {
         resolve();});
     });
 };
-function registerUser(userData){
+module.exports.registerUser=function(userData){
     return new Promise((resolve,reject)=>{
         if(userData.password !== userData.password2){
 reject("Passwords do not match");
@@ -58,9 +58,9 @@ reject("Passwords do not match");
 
 }
 
-function checkUser(userData){
+module.exports.checkUser=function(userData){
     return new Promise((resolve,reject)=>{
-        User.find({"userName":userData.userName}).exec()
+        User.find({userName:userData.userName}).exec()
         .then((users)=>{
            if(users.length==0){
             reject("User does not exist"+ userData.userName);

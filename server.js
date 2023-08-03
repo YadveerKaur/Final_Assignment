@@ -6,6 +6,7 @@ const store_service = require('./store-service')
 const authData=require('./auth-service')
 const app = express()
 const Sequelize = require('sequelize');
+const clientSessions=require('client-sessions');
 const port = process.env.PORT || 8080
 const multer = require("multer");
 const cloudinary = require('cloudinary').v2
@@ -53,6 +54,13 @@ formatDate: function(dateObj){
   let month = (dateObj.getMonth() + 1).toString();
   let day = dateObj.getDate().toString();
   return `${year}-${month.padStart(2, '0')}-${day.padStart(2,'0')}`;
+},
+authorize: function ensureLogin(req, res, next) {
+  if (!req.session.user) {
+    res.redirect("/login");
+  } else {
+    next();
+  }
 }
 
 }
@@ -75,12 +83,21 @@ app.use(function(req,res,next){
 app.use(express.urlencoded({extended: true}));
 app.use(express.static('public'));
 
-
+app.use(clientSessions({
+  cookieName: "session", // this is the object name that will be added to 'req'
+  secret: "week10example_web322", // this should be a long un-guessable string.
+  duration: 5* 60 * 1000, // duration of the session in milliseconds (2 minutes)
+  activeDuration: 1000 * 60 // the session will be extended by this many ms each request (1 minute)
+}));
+app.use(function(req, res, next)
+ {res.locals.session = req.session;
+  next();
+});
 app.get('/', (req, res) => {
   res.redirect("/shop")
 });
 
-app.get('/items/add', (req, res) => {
+app.get('/items/add',ensureLogin, (req, res) => {
   store_service.getCategories().then((data)=>{
     res.render("addItem", {categories: data});
   }).catch(()=>{
@@ -197,7 +214,7 @@ app.get('/shop/:id', async (req, res) => {
 });
 
 
-app.get('/items', (req, res) => {
+app.get('/items',ensureLogin, (req, res) => {
   const cat = req.query.category;
   const mDate = req.query.minDate;
 
@@ -224,7 +241,7 @@ app.get('/items', (req, res) => {
   }
 });
 
-app.get('/items/:value', (req, res) => {
+app.get('/items/:value',ensureLogin, (req, res) => {
   const value = parseInt(req.params.value, 10);
   store_service.getItemById(value).then((data)=>{
     res.json(data)
@@ -233,7 +250,7 @@ app.get('/items/:value', (req, res) => {
   })
 });
 
-app.get('/categories', (req, res) => {
+app.get('/categories',ensureLogin, (req, res) => {
     store_service.getCategories().then((data)=>{
         res.render("categories", {items:data});
     }).catch((err)=>{
@@ -241,17 +258,17 @@ app.get('/categories', (req, res) => {
     })
   });
 
-app.get('/categories/add', (req,res)=>{
+app.get('/categories/add',ensureLogin, (req,res)=>{
   res.render('addCategory');
 });
 
-app.post('/categories/add', (req,res)=>{
+app.post('/categories/add',ensureLogin, (req,res)=>{
   console.log(req.body);
   store_service.addCategory(req.body);
   res.redirect('/categories');
 });
 
-app.get('/categories/delete/:id', (req,res)=>{
+app.get('/categories/delete/:id', ensureLogin,(req,res)=>{
   const id=req.params.id;
   store_service.deleteCategoryById(id).then(()=>{
     res.redirect('/categories');
@@ -260,7 +277,7 @@ app.get('/categories/delete/:id', (req,res)=>{
   })
 });
 
-app.get('/items/delete/:id', (req,res)=>{
+app.get('/items/delete/:id',ensureLogin, (req,res)=>{
   const id=req.params.id;
   store_service.deletePostById(id).then(()=>{
     res.redirect('/items');
@@ -269,7 +286,7 @@ app.get('/items/delete/:id', (req,res)=>{
   })
 });
 
-  app.post('/items/add',upload.single("featureImage"),(req,res)=>{
+  app.post('/items/add',ensureLogin,upload.single("featureImage"),(req,res)=>{
     if(req.file){
       let streamUpload = (req) => {
           return new Promise((resolve, reject) => {
@@ -325,7 +342,7 @@ function onHTTPstart(){
   console.log("server started on port: " + port)
 }
 
-store_service.initialize().then(function(){
+store_service.initialize().then(authData.initialize).then(function(){
   app.listen(port,onHTTPstart);
 }).catch(function(err){
   console.log("unable to start " + err)

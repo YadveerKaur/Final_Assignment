@@ -118,7 +118,7 @@ app.get('register',(req,res)=>{
 })
 
 app.post('/register',(req,res)=>{
-  authData.RegisterUser(req.body).then(()=>{
+  authData.registerUser(req.body).then(()=>{
     res.render('register',{successMessage:'User Creater'});
   })
   .catch((err) => {
@@ -128,7 +128,7 @@ app.post('/register',(req,res)=>{
 
 app.post('/login', (req, res) => {
   req.body.userAgent = req.get('User-Agent');
-  authData.CheckUser(req.body)
+  authData.checkUser(req.body)
     .then((user) => {
       req.session.user = {
         userName: user.userName,

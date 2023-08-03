@@ -16,12 +16,12 @@ var userSchema=new Schema({
     }
 ]
 });
-let User;//XavfTbJeYZAYXuJy
+let User;
 //mongodb+srv://yadveer-kaur5:XavfTbJeYZAYXuJy@senecaweb.4rnow52.mongodb.net/web322_week8/?retryWrites=true&w=majority
 module.exports.initialize = function () {
     return new Promise(function (resolve, reject) {
 
-    let db = mongoose.createConnection("mongodb+srv://yadveer-kaur5:XavfTbJeYZAYXuJy@senecaweb.4rnow52.mongodb.net/web322_week8/?retryWrites=true&w=majority");
+    let db = mongoose.createConnection("mongodb+srv://yadveer-kaur5:XavfTbJeYZAYXuJy@senecaweb.4rnow52.mongodb.net/web322_week8?retryWrites=true&w=majority");
     db.on('error', (err)=>{
         reject(err); // reject the promise with the provided error
     });

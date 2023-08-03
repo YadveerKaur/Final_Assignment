@@ -55,7 +55,7 @@ formatDate: function(dateObj){
   let day = dateObj.getDate().toString();
   return `${year}-${month.padStart(2, '0')}-${day.padStart(2,'0')}`;
 },
-authorize: function ensureLogin(req, res, next) {
+ensureLogin:function (req, res, next) {
   if (!req.session.user) {
     res.redirect("/login");
   } else {

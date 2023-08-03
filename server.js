@@ -54,14 +54,8 @@ formatDate: function(dateObj){
   let month = (dateObj.getMonth() + 1).toString();
   let day = dateObj.getDate().toString();
   return `${year}-${month.padStart(2, '0')}-${day.padStart(2,'0')}`;
-},
-ensureLogin:function (req, res, next) {
-  if (!req.session.user) {
-    res.redirect("/login");
-  } else {
-    next();
-  }
 }
+
 
 }
 }));
@@ -72,7 +66,13 @@ cloudinary.config({
   api_key: '384368237456848', 
   api_secret: 'VIC5H8t5Iciyq_J_1HZEWeXnqQI' 
 });
-
+function ensureLogin(req, res, next) {
+  if (!req.session.user) {
+    res.redirect("/login");
+  } else {
+    next();
+  }
+}
 app.use(function(req,res,next){
   let route = req.path.substring(1);
   app.locals.activeRoute = "/" + (isNaN(route.split('/')[1]) ? route.replace(/\/(?!.*)/, "") : route.replace(/\/(.*)/, ""));

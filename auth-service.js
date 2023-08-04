@@ -60,29 +60,30 @@ reject("Passwords do not match");
 
 module.exports.checkUser=function(userData){
     return new Promise((resolve,reject)=>{
-        User.find({userName:userData.userName}).exec()
+        User.find({"userName":userData.userName}).exec()
         .then((users)=>{
            if(users.length==0){
             reject("User does not exist"+ userData.userName);
            }else{
-            bcrypt.compare(userData.password, users[0].password.then((res)=>{
+            bcrypt.compare(userData.password, users[0].password).then((res)=>{
                 if(res==true){
                     users[0].loginHistory.push({dateTime:(new Date()).toString(),userAgent: userData.userAgent});
                     User.updateOne({userName: users[0].userName},
                         {$set:{loginHistory: users[0].loginHistory}}
                         ).exec()
                         .then(()=>{
-                        resolve(users[0]);})
+                        resolve(users[0]);
+                    })
                         .catch((err)=>{
                             reject("Problem varyfying the user"+ err);
                         });
                 }else{
                     reject("Wrong Password");
                 }
-            }))
+            })
            }
         }).catch((err)=>{
-            reject("Unable to find userName"+ userData.userName);
+            reject("Unable to find userName"+ err);
         })
     });
 }

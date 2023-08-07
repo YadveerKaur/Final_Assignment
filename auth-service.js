@@ -17,7 +17,7 @@ var userSchema=new Schema({
 ]
 });
 let User;
-//mongodb+srv://yadveer-kaur5:XavfTbJeYZAYXuJy@senecaweb.4rnow52.mongodb.net/web322_week8/?retryWrites=true&w=majority
+
 module.exports.initialize = function () {
     return new Promise(function (resolve, reject) {
 

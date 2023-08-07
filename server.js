@@ -1,6 +1,17 @@
 /*
 Assignment 5 Solution - Leave this if you want to use it for Assignment 6 - MS
 */
+/********************************************************************************** 
+ * WEB322 – Assignment 06* 
+ * I declare that this assignment is my own work in accordance with Seneca Academic Policy.
+ *  No part* of this assignment has been copied manually or electronically from any other 
+ * source (including 3rd party web sites) or distributed to other students.*
+ * Name: __Yadveer Kaur_ 
+ * Student ID: _164592214_
+ * Date: __Aug 8,2023____ 
+ * Online (Cyclic) Link:  https://ruby-crazy-gosling.cyclic.app
+ * **********************************************************************************/
+
 const express = require('express')
 const store_service = require('./store-service')
 const authData=require('./auth-service')

@@ -34,11 +34,16 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="nav navbar-nav navbar-right">
-            {{#navLink "/items"}}Items{{/navLink}}
-           {{#navLink "/categories"}}Categories{{/navLink}}
+               {{#navLink "/shop"}}Shop{{/navLink}}
+                             {{#navLink "/about"}}About{{/navLink}}
+            
           </ul>
           {{#if session.user}}
+          <ul class="nav navbar-nav navbar-right">
+        {{#navLink "/items"}}Items{{/navLink}}
+        {{#navLink "/categories"}}Categories{{/navLink}}</ul>
     <form class="navbar-form navbar-right">
+      
       <div class="dropdown">
         <button class="btn btn-primary dropdown-toggle" type="button" id="userMenu" data-toggle="dropdown">
           <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;{{session.user.userName}}&nbsp;&nbsp;<span class="caret"></span>
